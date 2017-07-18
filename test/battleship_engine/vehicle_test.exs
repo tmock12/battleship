@@ -51,4 +51,19 @@ defmodule BattleshipEngine.VehicleTest do
     {:hit, vehicle} = Vehicle.guess(vehicle, coordinate)
     assert vehicle.hit_coordinates == MapSet.new([coordinate])
   end
+
+  test "sunk?" do
+    coordinate = %Coordinate{row: 1, col: 1}
+    sunk_vehicle = %Vehicle{
+      coordinates: MapSet.new([coordinate]),
+      hit_coordinates: MapSet.new([coordinate])
+    }
+    floating_vehicle = %Vehicle{
+      coordinates: MapSet.new([coordinate]),
+      hit_coordinates: MapSet.new()
+    }
+
+    assert Vehicle.sunk?(sunk_vehicle)
+    refute Vehicle.sunk?(floating_vehicle)
+  end
 end

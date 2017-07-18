@@ -27,6 +27,10 @@ defmodule BattleshipEngine.Vehicle do
     end
   end
 
+  def sunk?(%Vehicle{} = vehicle) do
+    MapSet.equal?(vehicle.hit_coordinates, vehicle.coordinates)
+  end
+
   defp offsets(:b52), do: [{0, 1}, {1, 1}, {1, 0}, {1, 2}, {2, 1}]
   defp offsets(:stiletto), do: [{0, 0}, {0, 1}, {1, 0}, {1, 1}]
   defp offsets(:battleship), do: [{0, 0}, {0, 1}, {0, 2}, {0, 3}]
