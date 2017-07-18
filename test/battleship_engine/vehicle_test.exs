@@ -35,4 +35,20 @@ defmodule BattleshipEngine.VehicleTest do
 
     refute Vehicle.overlaps?(existing, new)
   end
+
+  test "guess with a miss" do
+    coordinate = %Coordinate{row: 1, col: 1}
+    miss_coordinate = %Coordinate{row: 2, col: 2}
+    vehicle = %Vehicle{coordinates: MapSet.new([coordinate]), hit_coordinates: MapSet.new()}
+
+    assert Vehicle.guess(vehicle, miss_coordinate) == :miss
+  end
+
+  test "guess with a hit" do
+    coordinate = %Coordinate{row: 1, col: 1}
+    vehicle = %Vehicle{coordinates: MapSet.new([coordinate]), hit_coordinates: MapSet.new()}
+
+    {:hit, vehicle} = Vehicle.guess(vehicle, coordinate)
+    assert vehicle.hit_coordinates == MapSet.new([coordinate])
+  end
 end

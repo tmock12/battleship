@@ -17,6 +17,16 @@ defmodule BattleshipEngine.Vehicle do
     not MapSet.disjoint?(existing_vehicle.coordinates, new_vehicle.coordinates)
   end
 
+  def guess(vehicle, %Coordinate{} = coordinate) do
+    case MapSet.member?(vehicle.coordinates, coordinate) do
+      true ->
+        hit_coordinates = MapSet.put(vehicle.hit_coordinates, coordinate)
+        {:hit, %{vehicle | hit_coordinates: hit_coordinates} }
+      false ->
+        :miss
+    end
+  end
+
   defp offsets(:b52), do: [{0, 1}, {1, 1}, {1, 0}, {1, 2}, {2, 1}]
   defp offsets(:stiletto), do: [{0, 0}, {0, 1}, {1, 0}, {1, 1}]
   defp offsets(:battleship), do: [{0, 0}, {0, 1}, {0, 2}, {0, 3}]
