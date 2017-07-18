@@ -1,5 +1,6 @@
 defmodule BattleshipEngine.Vehicle do
   alias BattleshipEngine.{Vehicle, Coordinate}
+  @vehicle_types [:b52, :stiletto, :battleship, :destroyer, :higgins]
   @enforce_keys [:coordinates, :hit_coordinates]
   defstruct [:coordinates, :hit_coordinates]
 
@@ -30,6 +31,8 @@ defmodule BattleshipEngine.Vehicle do
   def sunk?(%Vehicle{} = vehicle) do
     MapSet.equal?(vehicle.hit_coordinates, vehicle.coordinates)
   end
+
+  def types(), do: @vehicle_types
 
   defp offsets(:b52), do: [{0, 1}, {1, 1}, {1, 0}, {1, 2}, {2, 1}]
   defp offsets(:stiletto), do: [{0, 0}, {0, 1}, {1, 0}, {1, 1}]
