@@ -13,6 +13,10 @@ defmodule BattleshipEngine.Vehicle do
     end
   end
 
+  def overlaps?(existing_vehicle, new_vehicle) do
+    not MapSet.disjoint?(existing_vehicle.coordinates, new_vehicle.coordinates)
+  end
+
   defp offsets(:b52), do: [{0, 1}, {1, 1}, {1, 0}, {1, 2}, {2, 1}]
   defp offsets(:stiletto), do: [{0, 0}, {0, 1}, {1, 0}, {1, 1}]
   defp offsets(:battleship), do: [{0, 0}, {0, 1}, {0, 2}, {0, 3}]

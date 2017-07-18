@@ -21,4 +21,18 @@ defmodule BattleshipEngine.VehicleTest do
   test "new with invalid vehicle name returns invalid vehicle type" do
     assert new_vehicle(:non_existant) == {:error, :invalid_vehicle_name}
   end
+
+  test "overlaps if coordinates are matching" do
+    {:ok, existing} = new_vehicle(:b52, 1, 1)
+    {:ok, new} = new_vehicle(:b52, 1, 1)
+
+    assert Vehicle.overlaps?(existing, new)
+  end
+
+  test "does not overlap if no coordinates match" do
+    {:ok, existing} = new_vehicle(:b52, 5, 5)
+    {:ok, new} = new_vehicle(:b52, 1, 1)
+
+    refute Vehicle.overlaps?(existing, new)
+  end
 end
