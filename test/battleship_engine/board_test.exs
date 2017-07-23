@@ -15,4 +15,12 @@ defmodule BattleshipEngine.BoardTest do
 
     assert Board.position_vehicle(%{stiletto: vehicle}, :b52, vehicle) == {:error, :overlapping_vehicle}
   end
+
+  test "all_vehicles_positioned?" do
+    full_board = Vehicle.types() |> Enum.into(%{}, &({&1, nil}))
+    missing_vehicles = %{b52: nil, destroy: nil}
+
+    assert Board.all_vehicles_positioned?(full_board)
+    refute Board.all_vehicles_positioned?(missing_vehicles)
+  end
 end
