@@ -1,0 +1,24 @@
+{
+  "lib/*.ex": {
+    "type": "lib",
+    "alternate": "test/{}_test.exs",
+    "template": [
+      "defmodule {capitalize|dot} do",
+      "  @moduledoc \"\"\"",
+      "  \"\"\"",
+      "end"
+    ]
+  },
+  "test/*_test.exs": {
+    "type": "test",
+    "alternate": "lib/{}.ex",
+    "template": [
+      "defmodule {capitalize|dot}Test do",
+      "  use ExUnit.Case",
+      "end"
+    ]
+  },
+  "*": {
+    "make": "mix"
+  }
+}
