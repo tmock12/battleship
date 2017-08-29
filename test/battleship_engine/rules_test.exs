@@ -21,5 +21,17 @@ defmodule BattleshipEngine.RulesTest do
       rules = %Rules{state: :players_set, player1: :ships_set}
       assert Rules.check(rules, {:position_ships, :player1}) == :error
     end
+
+    test "players can lock in their ships during players_set" do
+      rules = %Rules{state: :players_set, player1: :ships_not_set}
+      assert Rules.check(rules, {:set_ships, :player1}) == {:ok, %Rules{state: :players_set, player1: :ships_set}}
+    end
+
+    test "when both players lock in ships, it transitions to :player1_turn" do
+      rules = %Rules{state: :players_set, player1: :ships_set, player2: :ships_not_set}
+
+      {:ok, new_rules} = Rules.check(rules, {:set_ships, :player2})
+      assert new_rules.state == :player1_turn
+    end
   end
 end
