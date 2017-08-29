@@ -33,5 +33,39 @@ defmodule BattleshipEngine.RulesTest do
       {:ok, new_rules} = Rules.check(rules, {:set_ships, :player2})
       assert new_rules.state == :player1_turn
     end
+
+    test "with no win and player1_turn it transitions to player2_turn" do
+      rules = %Rules{state: :player1_turn}
+      {:ok, new_rules} = Rules.check(rules, {:guess_coordinate, :player1})
+
+      assert new_rules.state == :player2_turn
+    end
+
+    test "with no win and player2_turn it transitions to player1_turn" do
+      rules = %Rules{state: :player2_turn}
+      {:ok, new_rules} = Rules.check(rules, {:guess_coordinate, :player2})
+
+      assert new_rules.state == :player1_turn
+    end
+
+    test "with no win and player1_turn, player2 can't guess" do
+      rules = %Rules{state: :player1_turn}
+
+      assert Rules.check(rules, {:guess_coordinate, :player2}) == :error
+    end
+
+    test "with a win and player1_turn, transitions to :game_over" do
+      rules = %Rules{state: :player1_turn}
+      {:ok, new_rules} = Rules.check(rules, {:win_check, :win})
+
+      assert new_rules.state == :game_over
+    end
+
+    test "with a win and player2_turn, transitions to :game_over" do
+      rules = %Rules{state: :player2_turn}
+      {:ok, new_rules} = Rules.check(rules, {:win_check, :win})
+
+      assert new_rules.state == :game_over
+    end
   end
 end
