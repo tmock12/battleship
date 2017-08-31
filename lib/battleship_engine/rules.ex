@@ -1,8 +1,8 @@
 defmodule BattleshipEngine.Rules do
   alias __MODULE__
   defstruct state: :initialized,
-            player1: :ships_not_set,
-            player2: :ships_not_set
+            player1: :vehicles_not_set,
+            player2: :vehicles_not_set
 
   def new(), do: %Rules{}
 
@@ -10,17 +10,17 @@ defmodule BattleshipEngine.Rules do
     {:ok, %Rules{rules | state: :players_set}}
   end
 
-  def check(%Rules{state: :players_set} = rules, {:position_ships, player}) do
+  def check(%Rules{state: :players_set} = rules, {:position_vehicles, player}) do
     case Map.fetch!(rules, player) do
-      :ships_set -> :error
-      :ships_not_set -> {:ok, rules}
+      :vehicles_set -> :error
+      :vehicles_not_set -> {:ok, rules}
     end
   end
 
-  def check(%Rules{state: :players_set} = rules, {:set_ships, player}) do
-    rules = Map.put(rules, player, :ships_set)
+  def check(%Rules{state: :players_set} = rules, {:set_vehicles, player}) do
+    rules = Map.put(rules, player, :vehicles_set)
 
-    case both_players_ships_set?(rules) do
+    case both_players_vehicles_set?(rules) do
       true -> {:ok, %Rules{rules | state: :player1_turn}}
       false -> {:ok, rules}
     end
@@ -50,7 +50,7 @@ defmodule BattleshipEngine.Rules do
 
   def check(_state, _action), do: :error
 
-  defp both_players_ships_set?(rules) do
-    rules.player1 == :ships_set && rules.player2 == :ships_set
+  defp both_players_vehicles_set?(rules) do
+    rules.player1 == :vehicles_set && rules.player2 == :vehicles_set
   end
 end

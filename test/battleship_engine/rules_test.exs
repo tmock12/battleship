@@ -12,25 +12,25 @@ defmodule BattleshipEngine.RulesTest do
       assert Rules.check(rules, :add_player) == {:ok, %Rules{state: :players_set}}
     end
 
-    test "players ships not set can position their ships in players_set" do
+    test "players vehicles not set can position their vehicles in players_set" do
       rules = %Rules{state: :players_set}
-      assert Rules.check(rules, {:position_ships, :player1}) == {:ok, rules}
+      assert Rules.check(rules, {:position_vehicles, :player1}) == {:ok, rules}
     end
 
-    test "players with ships set can't set their ships in players set" do
-      rules = %Rules{state: :players_set, player1: :ships_set}
-      assert Rules.check(rules, {:position_ships, :player1}) == :error
+    test "players with vehicles set can't set their vehicles in players set" do
+      rules = %Rules{state: :players_set, player1: :vehicles_set}
+      assert Rules.check(rules, {:position_vehicles, :player1}) == :error
     end
 
-    test "players can lock in their ships during players_set" do
-      rules = %Rules{state: :players_set, player1: :ships_not_set}
-      assert Rules.check(rules, {:set_ships, :player1}) == {:ok, %Rules{state: :players_set, player1: :ships_set}}
+    test "players can lock in their vehicles during players_set" do
+      rules = %Rules{state: :players_set, player1: :vehicles_not_set}
+      assert Rules.check(rules, {:set_vehicles, :player1}) == {:ok, %Rules{state: :players_set, player1: :vehicles_set}}
     end
 
-    test "when both players lock in ships, it transitions to :player1_turn" do
-      rules = %Rules{state: :players_set, player1: :ships_set, player2: :ships_not_set}
+    test "when both players lock in vehicles, it transitions to :player1_turn" do
+      rules = %Rules{state: :players_set, player1: :vehicles_set, player2: :vehicles_not_set}
 
-      {:ok, new_rules} = Rules.check(rules, {:set_ships, :player2})
+      {:ok, new_rules} = Rules.check(rules, {:set_vehicles, :player2})
       assert new_rules.state == :player1_turn
     end
 

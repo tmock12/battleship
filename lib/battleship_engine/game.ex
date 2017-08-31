@@ -24,10 +24,10 @@ defmodule BattleshipEngine.Game do
     end
   end
 
-  def handle_call({:position_ship, player, key, row, col}, _from, state) do
+  def handle_call({:position_vehicle, player, key, row, col}, _from, state) do
     board = player_board(state, player)
 
-    with {:ok, rules} <- Rules.check(state.rules, {:position_ships, player}),
+    with {:ok, rules} <- Rules.check(state.rules, {:position_vehicles, player}),
          {:ok, coordinate} <- Coordinate.new(row, col),
          {:ok, vehicle} <- Vehicle.new(key, coordinate),
          %{} = board <- Board.position_vehicle(board, key, vehicle)
@@ -52,8 +52,8 @@ defmodule BattleshipEngine.Game do
   def add_player(game, name) when is_binary(name),
     do: GenServer.call(game, {:add_player, name})
 
-  def position_ship(game, player, key, row, col) when player in @players,
-    do: GenServer.call(game, {:position_ship, player, key, row, col})
+  def position_vehicle(game, player, key, row, col) when player in @players,
+    do: GenServer.call(game, {:position_vehicle, player, key, row, col})
 
   defp reply_success(state, reply), do: {:reply, reply, state}
 
