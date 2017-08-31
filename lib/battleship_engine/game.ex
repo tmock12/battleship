@@ -1,4 +1,9 @@
 defmodule BattleshipEngine.Game do
+  @moduledoc """
+  Genserver for creating new games, adding players and transitioning through
+  Rule states
+  """
+
   @players [:player1, :player2]
   use GenServer
   alias BattleshipEngine.{Board, Coordinate, Guesses, Vehicle, Rules}

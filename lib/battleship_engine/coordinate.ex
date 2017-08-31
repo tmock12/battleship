@@ -1,4 +1,8 @@
 defmodule BattleshipEngine.Coordinate do
+  @moduledoc """
+  Container for row and column for guesses and vehicle positioning
+  """
+
   alias __MODULE__
   @enforce_keys [:row, :col]
   @board_range 1..10

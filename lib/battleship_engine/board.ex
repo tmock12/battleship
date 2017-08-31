@@ -1,4 +1,8 @@
 defmodule BattleshipEngine.Board do
+  @moduledoc """
+  Handles positioning of Vehicles
+  """
+
   alias BattleshipEngine.{Vehicle, Coordinate}
   def new(), do: %{}
 
@@ -51,7 +55,7 @@ defmodule BattleshipEngine.Board do
   end
 
   defp all_sunk?(board) do
-    Enum.all?(board, fn ({_k,v}) ->Vehicle.sunk?(v) end)
+    Enum.all?(board, fn ({_k, v}) -> Vehicle.sunk?(v) end)
   end
 
   defp sunk_check?(board, key) do

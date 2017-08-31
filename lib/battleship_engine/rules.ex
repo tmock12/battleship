@@ -1,4 +1,8 @@
 defmodule BattleshipEngine.Rules do
+  @moduledoc """
+  Rule management for states of the game
+  """
+
   alias __MODULE__
   defstruct state: :initialized,
             player1: :vehicles_not_set,

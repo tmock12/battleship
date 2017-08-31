@@ -1,4 +1,8 @@
 defmodule BattleshipEngine.Vehicle do
+  @moduledoc """
+  Creation and management of Vehicles
+  """
+
   alias BattleshipEngine.{Vehicle, Coordinate}
   @vehicle_types [:b52, :stiletto, :battleship, :destroyer, :higgins]
   @enforce_keys [:coordinates, :hit_coordinates]
@@ -8,7 +12,7 @@ defmodule BattleshipEngine.Vehicle do
     with [_|_] = offsets <- offsets(vehicle_name),
          %MapSet{} = coordinates <- add_coordinates(offsets, upper_left)
     do
-      { :ok, %Vehicle{coordinates: coordinates, hit_coordinates: MapSet.new()} }
+      {:ok, %Vehicle{coordinates: coordinates, hit_coordinates: MapSet.new()}}
     else
       error -> error
     end
@@ -22,7 +26,7 @@ defmodule BattleshipEngine.Vehicle do
     case MapSet.member?(vehicle.coordinates, coordinate) do
       true ->
         hit_coordinates = MapSet.put(vehicle.hit_coordinates, coordinate)
-        {:hit, %{vehicle | hit_coordinates: hit_coordinates} }
+        {:hit, %{vehicle | hit_coordinates: hit_coordinates}}
       false ->
         :miss
     end

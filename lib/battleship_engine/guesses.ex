@@ -1,4 +1,8 @@
 defmodule BattleshipEngine.Guesses do
+  @moduledoc """
+  Keeps track of hit and miss coordinates
+  """
+
   alias __MODULE__
   alias BattleshipEngine.{Coordinate, Guesses}
 
