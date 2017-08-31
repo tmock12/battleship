@@ -1,6 +1,6 @@
 defmodule BattleshipEngine.Rules do
   alias __MODULE__
-  defstruct state: :iniitialized,
+  defstruct state: :initialized,
             player1: :ships_not_set,
             player2: :ships_not_set
 
