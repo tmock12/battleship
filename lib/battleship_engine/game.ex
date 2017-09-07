@@ -36,19 +36,27 @@ defmodule BattleshipEngine.Game do
          {:ok, coordinate} <- Coordinate.new(row, col),
          {:ok, vehicle} <- Vehicle.new(key, coordinate),
          %{} = board <- Board.position_vehicle(board, key, vehicle)
-
     do
       state
       |> update_board(player, board)
       |> update_rules(rules)
       |> reply_success(:ok)
     else
-      {:error, :invalid_coordinate} ->
-        {:reply, {:error, :invalid_coordinate}, state}
-      {:error, :invalid_vehicle_name} ->
-        {:reply, {:error, :invalid_vehicle_name}, state}
-      {:error, :overlapping_vehicle} ->
-        {:reply, {:error, :overlapping_vehicle}, state}
+      error ->
+        {:reply, error, state}
+    end
+  end
+
+  def handle_call({:set_vehicles, player}, _from, state) do
+    with {:ok, rules} <- Rules.check(state.rules, {:set_vehicles, player}),
+         true <- player_board(state, player) |> Board.all_vehicles_positioned?
+    do
+      state
+      |> update_rules(rules)
+      |> reply_success(:ok)
+    else
+      false ->
+        {:reply, {:error, :not_all_vehicles_positioned}, state}
       error ->
         {:reply, error, state}
     end
@@ -59,6 +67,9 @@ defmodule BattleshipEngine.Game do
 
   def position_vehicle(game, player, key, row, col) when player in @players,
     do: GenServer.call(game, {:position_vehicle, player, key, row, col})
+
+  def set_vehicles(game, player) when player in @players,
+    do: GenServer.call(game, {:set_vehicles, player})
 
   defp reply_success(state, reply), do: {:reply, reply, state}
 
