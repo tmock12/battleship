@@ -3,7 +3,7 @@
     "type": "lib",
     "alternate": "test/{}_test.exs",
     "template": [
-      "defmodule {capitalize|dot} do",
+      "defmodule {camelcase|capitalize|dot} do",
       "  @moduledoc \"\"\"",
       "  \"\"\"",
       "end"
@@ -13,7 +13,7 @@
     "type": "test",
     "alternate": "lib/{}.ex",
     "template": [
-      "defmodule {capitalize|dot}Test do",
+      "defmodule {camelcase|capitalize|dot}Test do",
       "  use ExUnit.Case",
       "end"
     ]
