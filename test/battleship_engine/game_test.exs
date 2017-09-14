@@ -32,4 +32,9 @@ defmodule BattleshipEngine.GameTest do
       assert new_state.rules.state == :player2_turn
     end
   end
+
+  test "Games are unique processes via player name" do
+    assert {:ok, _pid} = Game.start_link("tester")
+    assert {:error, {:already_started, _pid}} = Game.start_link("tester")
+  end
 end
