@@ -62,6 +62,30 @@ defmodule BattleshipEngine.Game do
     end
   end
 
+  def handle_call({:guess_coordinate, player, row, col}, _from, state) do
+    opponent_key = opponent(player)
+    opponent_board = player_board(state, opponent_key)
+
+    with {:ok, rules} <-
+           Rules.check(state.rules, {:guess_coordinate, player}),
+         {:ok, coordinate} <-
+           Coordinate.new(row, col),
+         {hit_or_miss, sunk, win_status, opponent_board} <-
+           Board.guess(opponent_board, coordinate),
+         {:ok, rules} <-
+           Rules.check(rules, {:win_check, win_status})
+    do
+      state
+      |> update_board(opponent_key, opponent_board)
+      |> update_guesses(player, hit_or_miss, coordinate)
+      |> update_rules(rules)
+      |> reply_success({hit_or_miss, sunk, win_status})
+    else
+      error ->
+        error
+    end
+  end
+
   def add_player(game, name) when is_binary(name),
     do: GenServer.call(game, {:add_player, name})
 
@@ -70,6 +94,9 @@ defmodule BattleshipEngine.Game do
 
   def set_vehicles(game, player) when player in @players,
     do: GenServer.call(game, {:set_vehicles, player})
+
+  def guess_coordinate(game, player, row, col) when player in @players,
+    do: GenServer.call(game, {:guess_coordinate, player, row, col})
 
   defp reply_success(state, reply), do: {:reply, reply, state}
 
@@ -81,4 +108,13 @@ defmodule BattleshipEngine.Game do
 
   defp update_board(state, player, board), do:
     Map.update!(state, player, fn player -> %{player | board: board} end)
+
+  defp update_guesses(state, player, hit_or_miss, coordinate) do
+    update_in(state[player].guesses, fn guesses ->
+      Guesses.add(guesses, hit_or_miss, coordinate)
+    end)
+  end
+
+  defp opponent(:player1), do: :player2
+  defp opponent(:player2), do: :player1
 end

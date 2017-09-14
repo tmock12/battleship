@@ -18,4 +18,18 @@ defmodule BattleshipEngine.GameTest do
       assert {:reply, {:error, :not_all_vehicles_positioned}, state} == response
     end
   end
+
+  describe "when rules state is player1_turn" do
+    setup context do
+      context = put_in(context.state.rules.state, :player1_turn)
+      {:ok, context}
+    end
+
+    test "guessing coordinates advances state with player1", %{state: state} do
+      {:reply, {:miss, :none, :no_win}, new_state}  = Game.handle_call(
+        {:guess_coordinate, :player1, 1, 1}, nil, state
+      )
+      assert new_state.rules.state == :player2_turn
+    end
+  end
 end
